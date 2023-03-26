@@ -1,0 +1,138 @@
+    
+</script>
+</html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Проект "Комменты"</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <ul class="comments" id="list">
+        <li class="comment">
+          <div class="comment-header">
+            <div>Глеб Фокин</div>
+            <div>12.02.22 12:18</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              Это будет первый комментарий на этой странице
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">3</span>
+              <button class="like-button" onclick="clickCounter()"></button>
+            </div>
+          </div>
+        </li>
+        <li class="comment">
+          <div class="comment-header">
+            <div>Варвара Н.</div>
+            <div>13.02.22 19:22</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              Мне нравится как оформлена эта страница! ❤
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">75</span>
+              <button class="like-button -active-like" onclick="clickCounter()"></button>
+            </div>
+          </div>
+        </li>
+      </ul>
+      <div class="add-form" id="form">
+        <input
+          type="text"
+          class="add-form-name"
+          placeholder="Введите ваше имя", id="input-name"
+        />
+        <textarea
+          type="textarea"
+          class="add-form-text", id="input-text"
+          placeholder="Введите ваш коментарий" 
+          rows="4"
+        ></textarea>
+        <div class="add-form-row">
+          <button class="add-form-button" id="add-button">Написать</button>
+        </div>
+      </div>
+    </div>
+  </body>
+<style>
+  .erorr{
+      border-width: 2px;
+      border-color: red;
+      background-color: rgb(225, 108, 108);
+}
+.gray{
+  background-color: #5d5d5d;
+  color: black;
+}
+</style>
+  <script>
+    
+    const buttonElement=document.getElementById('add-button');
+    const listElement = document.getElementById("list");
+    const nameInputElement = document.getElementById("input-name");
+    const textInputElement = document.getElementById("input-text");
+    
+    function time () {
+let dateComment = new Date();
+const months = ["01", "02", "03", "04", "05", "06","07", "08", "09", "10", "11", "12"];
+let fullDate = dateComment.getDate() + "." + months[dateComment.getMonth()] + "." + dateComment.getFullYear() + " " + dateComment.getHours() +":" + dateComment.getMinutes();
+return fullDate;
+}
+textInputElement.addEventListener('keyup', logKey);
+
+function logKey(e) {
+  listElement.oldListHtml += `${buttonElement.addEventListener}`;
+}
+
+buttonElement.addEventListener("click",() => {
+      
+      if (nameInputElement.value && textInputElement.value==="") {
+        textInputElement.classList.add("erorr");
+        buttonElement.classList.add("gray")
+        return;
+      } else if(nameInputElement.value==="" && textInputElement.value) {
+        nameInputElement.classList.add("erorr");
+        buttonElement.classList.add("gray")
+
+        return;
+      }
+      else{
+        buttonElement.classList.remove("gray")
+      }
+
+       const oldListHtml = listElement.innerHTML;
+        listElement.innerHTML = oldListHtml + 
+        `<li class="comment">
+        <div class="comment-header">
+        <div>${nameInputElement.value}</div>
+            <div>${time()}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${textInputElement.value}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">0</span>
+              <button class="like-button -active-like"></button>
+        </li>`
+        buttonElement.disabled = true;
+        nameInputElement.value = "";
+        textInputElement.value = "";
+    });
+
+    console.log(listElement.innerHTML);
+    
+</script>
+</html>

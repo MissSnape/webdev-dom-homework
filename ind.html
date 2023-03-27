@@ -1,9 +1,10 @@
-    
-</script>
-</html>
+
 <!DOCTYPE html>
-<html>
+<html lang="ru">
   <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Проект "Комменты"</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -11,7 +12,7 @@
   <body>
     <div class="container">
       <ul class="comments" id="list">
-        <li class="comment">
+        <!-- <li class="comment">
           <div class="comment-header">
             <div>Глеб Фокин</div>
             <div>12.02.22 12:18</div>
@@ -24,7 +25,7 @@
           <div class="comment-footer">
             <div class="likes">
               <span class="likes-counter">3</span>
-              <button class="like-button" onclick="clickCounter()"></button>
+              <button class="like-button"></button>
             </div>
           </div>
         </li>
@@ -44,7 +45,7 @@
               <button class="like-button -active-like" onclick="clickCounter()"></button>
             </div>
           </div>
-        </li>
+        </li> -->
       </ul>
       <div class="add-form" id="form">
         <input
@@ -81,7 +82,46 @@
     const listElement = document.getElementById("list");
     const nameInputElement = document.getElementById("input-name");
     const textInputElement = document.getElementById("input-text");
-    const commentElements = document.querySelectorAll(".comment");
+   
+    const comments = [
+      {
+        name: "Глеб Фокин",
+        dates: "12.02.22 12:18",
+        text: "Это будет первый комментарий на этой странице"
+      },
+      {
+        name: "Варвара Н.",
+        dates: "13.02.22 19:22",
+        text: "Мне нравится как оформлена эта страница! ❤"
+      }
+    ];
+    const renderComments = () => {
+      const commentsHtml = comments
+        .map((comments) => {
+          return `<li class="comment">
+        <div class="comment-header">
+        <div>${comments.name}</div>
+            <div>${comments.dates}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${comments.text}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter">0</span>
+              <button class="like-button"></button>
+        </li>`;
+        })
+        .join("");
+        listElement.innerHTML = commentsHtml;
+
+      
+    };
+    renderComments();
+
+const commentElements = document.querySelectorAll(".comment");
 
     const initEventListeners = () => {
       const commentElements = document.querySelectorAll(".comment");
@@ -94,6 +134,8 @@
         });
       }
     };
+
+    initEventListeners();
     function time () {
 let dateComment = new Date();
 const months = ["01", "02", "03", "04", "05", "06","07", "08", "09", "10", "11", "12"];
@@ -122,31 +164,41 @@ buttonElement.addEventListener("click",() => {
         buttonElement.classList.remove("gray")
       }
 
-       const oldListHtml = listElement.innerHTML;
-        listElement.innerHTML = oldListHtml + 
-        `<li class="comment">
-        <div class="comment-header">
-        <div>${nameInputElement.value}</div>
-            <div>${time()}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${textInputElement.value}
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">0</span>
-              <button class="like-button -active-like"></button>
-        </li>`;
-        initEventListeners();
+      comments.push({
+        name: nameInputElement.value,
+        dates: time(),
+        text: textInputElement.value
+      });
+
+      renderComments();
+
+
+     //  const oldListHtml = listElement.innerHTML;
+     //   listElement.innerHTML = oldListHtml + 
+       // `<li class="comment">
+//        <div class="comment-header">
+  //      <div>${nameInputElement.value}</div>
+    //        <div>${time()}</div>
+//          </div>
+  //        <div class="comment-body">
+    //        <div class="comment-text">
+      //        ${textInputElement.value}
+        //    </div>
+          //</div>
+ //         <div class="comment-footer">
+  //          <div class="likes">
+ //             <span class="likes-counter">0</span>
+    //          <button class="like-button"></button>
+      //  </li>`;
         
-        buttonElement.disabled = true;
+        initEventListeners();
+
         nameInputElement.value = "";
         textInputElement.value = "";
+        
     });
 
-    console.log(listElement.innerHTML);
+ //   console.log(listElement.innerHTML);
     
 </script>
 </html>

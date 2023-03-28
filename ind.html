@@ -159,9 +159,14 @@ buttonElement.addEventListener("click",() => {
         buttonElement.classList.add("gray")
 
         return;
-      }
-      else{
-        buttonElement.classList.remove("gray")
+      } else if(nameInputElement.value==="" && textInputElement.value===""){
+        nameInputElement.classList.add("erorr");
+        textInputElement.classList.add("erorr");
+        buttonElement.classList.add("gray")
+        return;
+      } else{
+        buttonElement.classList.remove("gray");
+        return;
       }
 
       comments.push({

@@ -82,17 +82,20 @@
     const listElement = document.getElementById("list");
     const nameInputElement = document.getElementById("input-name");
     const textInputElement = document.getElementById("input-text");
+   const likeElement = document.getElementById("likes-counter");
    
     const comments = [
       {
         name: "Глеб Фокин",
         dates: "12.02.22 12:18",
-        text: "Это будет первый комментарий на этой странице"
+        text: "Это будет первый комментарий на этой странице",
+        likeCounter: 3
       },
       {
         name: "Варвара Н.",
         dates: "13.02.22 19:22",
-        text: "Мне нравится как оформлена эта страница! ❤"
+        text: "Мне нравится как оформлена эта страница! ❤",
+        likeCounter: 75
       }
     ];
     const renderComments = () => {
@@ -110,7 +113,7 @@
           </div>
           <div class="comment-footer">
             <div class="likes">
-              <span class="likes-counter">0</span>
+              <span class="likes-counter">${comments.likeCounter}</span>
               <button class="like-button"></button>
         </li>`;
         })
@@ -149,30 +152,23 @@ function logKey(e) {
 }
 
 buttonElement.addEventListener("click",() => {
-      
-      if (nameInputElement.value && textInputElement.value==="") {
-        textInputElement.classList.add("erorr");
-        buttonElement.classList.add("gray")
-        return;
-      } else if(nameInputElement.value==="" && textInputElement.value) {
-        nameInputElement.classList.add("erorr");
-        buttonElement.classList.add("gray")
-
-        return;
-      } else if(nameInputElement.value==="" && textInputElement.value===""){
+  nameInputElement.classList.remove("erorr"); 
+  textInputElement.classList.remove("erorr");
+  buttonElement.classList.remove("gray");
+  
+       if(nameInputElement.value==="" || textInputElement.value===""){
         nameInputElement.classList.add("erorr");
         textInputElement.classList.add("erorr");
         buttonElement.classList.add("gray")
         return;
-      } else{
-        buttonElement.classList.remove("gray");
-        return;
-      }
+      };
+     
 
       comments.push({
         name: nameInputElement.value,
         dates: time(),
-        text: textInputElement.value
+        text: textInputElement.value,
+        likeCounter: 0
       });
 
       renderComments();

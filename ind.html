@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html lang="ru">
   <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Проект "Комменты"</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -51,12 +51,16 @@
         <input
           type="text"
           class="add-form-name"
-          placeholder="Введите ваше имя", id="input-name"
+          placeholder="Введите ваше имя"
+          ,
+          id="input-name"
         />
         <textarea
           type="textarea"
-          class="add-form-text", id="input-text"
-          placeholder="Введите ваш коментарий" 
+          class="add-form-text"
+          ,
+          id="input-text"
+          placeholder="Введите ваш коментарий"
           rows="4"
         ></textarea>
         <div class="add-form-row">
@@ -65,165 +69,223 @@
       </div>
     </div>
   </body>
-<style>
-  .erorr{
+  <style>
+    .erorr {
       border-width: 2px;
       border-color: red;
       background-color: rgb(225, 108, 108);
-}
-.gray{
-  background-color: #5d5d5d;
-  color: black;
-}
-</style>
+    }
+    .gray {
+      background-color: #5d5d5d;
+      color: black;
+    }
+  </style>
   <script>
-    
-    const buttonElement=document.getElementById('add-button');
+    const buttonElement = document.getElementById("add-button");
     const listElement = document.getElementById("list");
     const nameInputElement = document.getElementById("input-name");
     const textInputElement = document.getElementById("input-text");
-   const likeElement = document.getElementById("likes-counter");
-   const likeButtonElements = document.querySelectorAll(".like-button");
-   
-    const comments = [
+    const likeElement = document.getElementById("likes-counter");
+    const likeButtonElements = document.querySelectorAll(".like-button");
+
+    const fetchPromise = fetch(
+      "https://webdev-hw-api.vercel.app/api/v1/:gerasimova_anna/comments",
       {
-        name: "Глеб Фокин",
-        dates: "12.02.22 12:18",
-        text: "Это будет первый комментарий на этой странице",
-        likeCounter: 3
-      },
-      {
-        name: "Варвара Н.",
-        dates: "13.02.22 19:22",
-        text: "Мне нравится как оформлена эта страница! ❤",
-        likeCounter: 75
+        method: "GET",
       }
-    ];
+    );
+    fetchPromise.then((response) => {
+      const jsonPromise = response.json();
+      jsonPromise.then((responseData) => {
+        const appComments = responseData.comments.map((comment) => {
+          return {
+            name: comment.author.name,
+            dates: new Date(comment.date),
+            text: comment.text,
+            likeCounter: comment.likes,
+            isLiked: false,
+          };
+        });
+        
+        comment = appComments;
+        console.log(comment);
+        renderComments();
+      });
+    });
+
+    function AddAComment() {
+      fetch(
+        "https://webdev-hw-api.vercel.app/api/v1/:gerasimova_anna/comments",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            text: textInputElement.value,
+            name: nameInputElement.value,
+            dates: time(),
+            likeCounter: 0,
+          }),
+        }
+      ).then((response) => {
+        response.json().then((responseData) => {
+          commentJSON = responseData.result;
+          renderComments();
+        });
+        0;
+      });
+    }
+
+     // let comment = [
+    //   {
+    //     name: "Глеб Фокин",
+    //     dates: "12.02.22 12:18",
+    //     text: "Это будет первый комментарий на этой странице",
+    //     likeCounter: 3,
+    //   },
+    //   {
+    //     name: "Варвара Н.",
+    //     dates: "13.02.22 19:22",
+    //     text: "Мне нравится как оформлена эта страница! ❤",
+    //     likeCounter: 75,
+    //   },
+    // ];
     const renderComments = () => {
-      const commentsHtml = comments
-        .map((comments) => {
+      const commentsHtml = comment
+        .map((comment) => {
           return `<li class="comment">
         <div class="comment-header">
-        <div>${comments.name}</div>
-            <div>${comments.dates}</div>
+        <div>${comment.name}</div>
+            <div>${comment.dates}</div>
           </div>
           <div class="comment-body">
             <div style="white-space:pre-line" class="comment-text">
-              ${comments.text} 
+              ${comment.text}
             </div>
           </div>
           <div class="comment-footer">
             <div class="likes">
-              <span class="likes-counter">${comments.likeCounter}</span>
+              <span class="likes-counter">${comment.likeCounter}</span>
               <button class="like-button"></button>
         </li>`;
         })
         .join("");
-        listElement.innerHTML = commentsHtml;
+      listElement.innerHTML = commentsHtml;
 
-        function sendAnAnswer(){
-  const commentElement = document.querySelectorAll(".comment");
-  for (const answerElement of commentElement){
-    answerElement.addEventListener("click",()=>{
-      let writer = answerElement.querySelector(".comment-header");
-      let reply = answerElement.querySelector(".comment-body");
-      
-      textInputElement.value = `${writer.textContent} ${reply.textContent}`
-      
-    })
-  }
-}
-sendAnAnswer();
+      function sendAnAnswer() {
+        const commentElement = document.querySelectorAll(".comment");
+        for (const answerElement of commentElement) {
+          answerElement.addEventListener("click", () => {
+            let writer = answerElement.querySelector(".comment-header");
+            let reply = answerElement.querySelector(".comment-body");
+            textInputElement.style.whiteSpace = "pre-line";
+            textInputElement.value = `${writer.textContent}  ${reply.textContent}`;
+          });
+        }
+      }
+      sendAnAnswer();
     };
     renderComments();
-    
-      function likeButton() {
 
-            const likeButtonElements = document.querySelectorAll(".like-button");
-            for (const likeButtonElement of likeButtonElements) {
-              const counterElement =
-              likeButtonElement.parentElement.querySelector(".likes-counter");
-              likeButtonElement.addEventListener("click", (event) => {
-                event.stopPropagation();
-              likeButtonElement.classList.toggle("-active-like");
-              likeButtonElement.classList.contains("-active-like")
-          ? counterElement.innerHTML++
-          : counterElement.innerHTML--;
+    function likeButton() {
+      const likeButtonElements = document.querySelectorAll(".like-button");
+      for (const likeButtonElement of likeButtonElements) {
+        const counterElement =
+          likeButtonElement.parentElement.querySelector(".likes-counter");
+        likeButtonElement.addEventListener("click", (event) => {
+          event.stopPropagation();
+          likeButtonElement.classList.toggle("-active-like");
+          likeButtonElement.classList.contains("-active-like")
+            ? counterElement.innerHTML++
+            : counterElement.innerHTML--;
         });
       }
-    }   
+    }
     likeButton();
-    
-    function time () {
-let dateComment = new Date();
-const months = ["01", "02", "03", "04", "05", "06","07", "08", "09", "10", "11", "12"];
-let fullDate = dateComment.getDate() + "." + months[dateComment.getMonth()] + "." + dateComment.getFullYear() + " " + dateComment.getHours() +":" + dateComment.getMinutes();
-return fullDate;
-}
 
+    function time() {
+      let dateComment = new Date();
+      const months = [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+      ];
+      let fullDate =
+        dateComment.getDate() +
+        "." +
+        months[dateComment.getMonth()] +
+        "." +
+        dateComment.getFullYear() +
+        " " +
+        dateComment.getHours() +
+        ":" +
+        dateComment.getMinutes();
+      return fullDate;
+    }
 
+    buttonElement.addEventListener("click", () => {
+      nameInputElement.classList.remove("erorr");
+      textInputElement.classList.remove("erorr");
+      buttonElement.classList.remove("gray");
 
-buttonElement.addEventListener("click",() => {
-  nameInputElement.classList.remove("erorr"); 
-  textInputElement.classList.remove("erorr");
-  buttonElement.classList.remove("gray");
-  
-       if(nameInputElement.value==="" || textInputElement.value===""){
+      if (nameInputElement.value === "" || textInputElement.value === "") {
         nameInputElement.classList.add("erorr");
         textInputElement.classList.add("erorr");
-        buttonElement.classList.add("gray")
+        buttonElement.classList.add("gray");
         return;
-      };
-     
+      }
 
-      comments.push({
+      comment.push({
         name: nameInputElement.value
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll("&", "&amp;")
-        .replaceAll('"', "&quot;"),
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll("&", "&amp;")
+          .replaceAll('"', "&quot;"),
         dates: time(),
         text: textInputElement.value
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll("&", "&amp;")
-        .replaceAll('"', "&quot;"),
-        likeCounter: 0
-        
-        
+          .replaceAll("BEGIN_QUOTE", "<div class='quote'>")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll("&", "&amp;")
+          .replaceAll('"', "&quot;"),
+        likeCounter: 0,
       });
 
       renderComments();
 
-
-     //  const oldListHtml = listElement.innerHTML;
-     //   listElement.innerHTML = oldListHtml + 
-       // `<li class="comment">
-//        <div class="comment-header">
-  //      <div>${nameInputElement.value}</div>
-    //        <div>${time()}</div>
-//          </div>
-  //        <div class="comment-body">
-    //        <div class="comment-text">
+      //  const oldListHtml = listElement.innerHTML;
+      //   listElement.innerHTML = oldListHtml +
+      // `<li class="comment">
+      //        <div class="comment-header">
+      //      <div>${nameInputElement.value}</div>
+      //        <div>${time()}</div>
+      //          </div>
+      //        <div class="comment-body">
+      //        <div class="comment-text">
       //        ${textInputElement.value}
-        //    </div>
-          //</div>
- //         <div class="comment-footer">
-  //          <div class="likes">
- //             <span class="likes-counter">0</span>
-    //          <button class="like-button"></button>
+      //    </div>
+      //</div>
+      //         <div class="comment-footer">
+      //          <div class="likes">
+      //             <span class="likes-counter">0</span>
+      //          <button class="like-button"></button>
       //  </li>`;
-        
-        
-        likeButton();
-        nameInputElement.value = "";
-        textInputElement.value = "";
-        
+
+      AddAComment();
+      likeButton();
+      nameInputElement.value = "";
+      textInputElement.value = "";
     });
 
- //   console.log(listElement.innerHTML);
-    
-</script>
+    //   console.log(listElement.innerHTML);
+  </script>
 </html>

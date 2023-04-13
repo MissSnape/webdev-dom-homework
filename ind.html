@@ -100,7 +100,7 @@
         const appComments = responseData.comments.map((comment) => {
           return {
             name: comment.author.name,
-            dates: new Date(comment.date),
+            dates: new Date(comment.date).toLocaleString().slice(0, -3),
             text: comment.text,
             likeCounter: comment.likes,
             isLiked: false,

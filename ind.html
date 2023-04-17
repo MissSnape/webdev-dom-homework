@@ -49,8 +49,9 @@
           </div>
         </li> -->
       </ul>
+      
+      <p id="data-loader-two" class="hidden"> Данные загружаются...</p>
       <div class="add-form" id="form">
-        <p id="data-loader-two" class="hidden"> Данные загружаются...</p>
         <input
           type="text"
           class="add-form-name"
@@ -124,6 +125,9 @@
     function AddAComment() {
       let loadingsComments = document.getElementById('data-loader-two');
       loadingsComments.classList.remove('hidden');
+      let formElement = document.getElementById('form');
+          formElement.classList.remove('hidden');
+
 
       fetch(
         "https://webdev-hw-api.vercel.app/api/v1/:gerasimova_anna/comments",
@@ -143,6 +147,8 @@
           renderComments();
           let loadingsComments = document.getElementById('data-loader-two');
           loadingsComments.classList.add('hidden');
+          let formElement = document.getElementById('form');
+          formElement.classList.add('hidden')
         });
       });
     }

@@ -127,6 +127,7 @@
       loadingsComments.classList.remove('hidden');
       let formElement = document.getElementById('form');
           formElement.classList.remove('hidden');
+          buttonElement.disabled = true;
 
 
       fetch(
@@ -150,7 +151,22 @@
           let formElement = document.getElementById('form');
           formElement.classList.add('hidden')
         });
+       
+      })
+    
+      .then(()=>{
+        buttonElement.disabled = false;
+        buttonElement.textContent = "Добавить";
+        textInputElement.value = "";
+        nameInputElement.value = "";
+      })
+      .catch((error)=>{
+        buttonElement.disabled = true;
+        buttonElement.textContent = "Добавить";
+        alert('Что-то пошло не так, попробуйте позже');
+        console.warn(error);
       });
+      
     }
 
 
@@ -256,10 +272,11 @@
       textInputElement.classList.remove("erorr");
       buttonElement.classList.remove("gray");
 
-      if (nameInputElement.value === "" || textInputElement.value === "") {
+      if (nameInputElement.value === "" || textInputElement.value === "" || nameInputElement.value.length<3 || textInputElement.value.length<3) {
         nameInputElement.classList.add("erorr");
         textInputElement.classList.add("erorr");
-        buttonElement.classList.add("gray");
+        buttonElement.classList.add("gray"); 
+        
         return;
       }
 

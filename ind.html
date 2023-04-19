@@ -159,11 +159,18 @@
         buttonElement.textContent = "Добавить";
         textInputElement.value = "";
         nameInputElement.value = "";
+        let formElement = document.getElementById('form');
+          formElement.classList.remove('hidden')
+        
       })
       .catch((error)=>{
         buttonElement.disabled = true;
         buttonElement.textContent = "Добавить";
+        let formElement = document.getElementById('form');
+          formElement.classList.remove('hidden')
         alert('Что-то пошло не так, попробуйте позже');
+        let loadingsComments = document.getElementById('data-loader-two');
+      loadingsComments.style.display='none';
         console.warn(error);
       });
       

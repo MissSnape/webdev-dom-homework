@@ -126,7 +126,7 @@
       let loadingsComments = document.getElementById('data-loader-two');
       loadingsComments.classList.remove('hidden');
       let formElement = document.getElementById('form');
-          formElement.classList.remove('hidden');
+          formElement.classList.add('hidden');
           buttonElement.disabled = true;
 
 
@@ -149,7 +149,7 @@
           let loadingsComments = document.getElementById('data-loader-two');
           loadingsComments.classList.add('hidden');
           let formElement = document.getElementById('form');
-          formElement.classList.add('hidden')
+          formElement.classList.remove('hidden')
         });
        
       })

@@ -164,7 +164,7 @@
         
       })
       .catch((error)=>{
-        buttonElement.disabled = true;
+        buttonElement.disabled = false;
         buttonElement.textContent = "Добавить";
         let formElement = document.getElementById('form');
           formElement.classList.remove('hidden')

@@ -143,15 +143,10 @@
         }
       ).then((response) => {
         console.log(response);
-       let MyError = new Error;
-        if (response.status === 201) {
-        nameInputElement.value = "" ;
-        commentInputElement.value = "" ;
-          return response.json();
-        }
+        
         if (response.status === 500) {
           throw new Error('Сервер сломался, попробуйте позже');
-        } if (response.status === 400) {
+        } else if (response.status === 400) {
           alert ("Имя и комментарий должны быть не короче 3 символов");
           return;
         

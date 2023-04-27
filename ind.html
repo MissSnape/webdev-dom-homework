@@ -148,6 +148,8 @@
           throw new Error('Сервер сломался, попробуйте позже');
         } else if (response.status === 400) {
           alert ("Имя и комментарий должны быть не короче 3 символов");
+          let loadingsComments = document.getElementById('data-loader-two');
+      loadingsComments.style.display='none';
           return;
         
         }
@@ -160,18 +162,18 @@
         });
        
       })
-      .catch((error)=>{
-        alert('Кажется, у вас сломался интернет, попробуйте позже');
-        buttonElement.disabled = false;
-        buttonElement.textContent = "Добавить";
-        let formElement = document.getElementById('form');
+      
+        .catch((error) => {
+          console.error(error);
+          alert("Кажется, у вас проблемы с интернетом, попробуйте позже");
+          buttonElement.disabled = false;
+          buttonElement.textContent = "Добавить";
+          let formElement = document.getElementById('form');
           formElement.classList.remove('hidden');
           let loadingsComments = document.getElementById('data-loader-two');
       loadingsComments.style.display='none';
-        console.warn(error);
-      }
-
-      )
+        })
+     
     
       .then(()=>{
         buttonElement.disabled = false;
@@ -180,7 +182,7 @@
         nameInputElement.value = "";
         let formElement = document.getElementById('form');
           formElement.classList.remove('hidden');
-          renderComments();
+          
         
       }).catch((error) =>{
   

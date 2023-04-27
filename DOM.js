@@ -95,7 +95,7 @@ function AddAComment() {
       nameInputElement.value = "";
       let formElement = document.getElementById('form');
         formElement.classList.remove('hidden');
-        renderComments(comment);
+        
         let loadingsComments = document.getElementById('data-loader-two');
         loadingsComments.classList.add('hidden');
       

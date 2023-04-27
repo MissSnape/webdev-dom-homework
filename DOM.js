@@ -19,8 +19,37 @@ const textInputElement = document.getElementById("input-text");
          likeCounter: 75,
         },
       ];
+      export const fetchAndRenderCommentsTwo = () => {
+        return tttt();
+      }
+      
+      fetchPromise().then((response) => {
+        let loadingComments =document.getElementById('data-loader');
+        loadingComments.style.display='none';
+        const jsonPromise = response.json();
+        jsonPromise.then((responseData) => {
+
+            let appComments = responseData.comments.map((comment) => {
+                return {
+                    name: comment.author.name,
+                    dates: new Date(comment.date).toLocaleString().slice(0, -3),
+                    text: comment.text,
+                    likeCounter: comment.likes,
+                    isLiked: false,
+                };
+            });
+
+            console.log(appComments);
+           
+            renderComments(appComments);
+            likeButton();
+          });
+        });
+        
+          
 
 function AddAComment() {
+
     let loadingsComments = document.getElementById('data-loader-two');
     loadingsComments.classList.remove('hidden');
     let formElement = document.getElementById('form');
@@ -148,28 +177,28 @@ export function likeButton() {
           likeCounter: 0,
         });
 
+        
         fetchPromise().then((response) => {
-            let loadingComments =document.getElementById('data-loader');
-            loadingComments.style.display='none';
-            const jsonPromise = response.json();
-            jsonPromise.then((responseData) => {
+        let loadingComments =document.getElementById('data-loader');
+        loadingComments.style.display='none';
+        const jsonPromise = response.json();
+        jsonPromise.then((responseData) => {
 
-                let appComments = responseData.comments.map((comment) => {
-                    return {
-                        name: comment.author.name,
-                        dates: new Date(comment.date).toLocaleString().slice(0, -3),
-                        text: comment.text,
-                        likeCounter: comment.likes,
-                        isLiked: false,
-                    };
-                });
-
-                console.log(appComments);
-                AddAComment();
-                nameInputElement.value = "";
-                textInputElement.value = "";
-                renderComments(appComments);
-                likeButton();
+            let appComments = responseData.comments.map((comment) => {
+                return {
+                    name: comment.author.name,
+                    dates: new Date(comment.date).toLocaleString().slice(0, -3),
+                    text: comment.text,
+                    likeCounter: comment.likes,
+                    isLiked: false,
+                };
             });
+
+            console.log(appComments);
+            AddAComment()
+            renderComments(appComments);
+            likeButton();
+          });
         });
+        
       });

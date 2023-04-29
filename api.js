@@ -60,7 +60,7 @@ export function getComments(comments) {
      })
      window.comments = appComments;
      renderComments();
-     inilikeButton();
+     likeButton();
      
    });
    

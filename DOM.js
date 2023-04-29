@@ -148,7 +148,7 @@ console.warn(error);
  nameInputElement.value = '';
  commentInputElement.value = '';
  
-  renderComments();
+  
   likeButton();
   
 });
@@ -162,6 +162,6 @@ console.warn(error);
 
  
 renderComments();
-initEventListeners();
+likeButton();
 
  

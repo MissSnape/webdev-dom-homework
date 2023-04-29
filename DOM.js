@@ -1,204 +1,167 @@
-import { renderComments }from "./rendercomment.js";
-import {fetchPromise, fetchAddComment} from "./api.js";
+import {renderComments} from "./rendercomment.js";
+import{getCommentsLoading,getComments,postComments} from "./api.js";
+
 const buttonElement = document.getElementById("add-button");
-const nameInputElement = document.getElementById("input-name");
-const textInputElement = document.getElementById("input-text");
+const commentsElement = document.getElementById("comments" ); 
+ const nameInputElement = document.getElementById("name-input" );
+ const commentInputElement = document.getElementById("comment-input" );
+const likes = document.querySelectorAll('.likes'); 
+let addForm = document.getElementById("add-form");
+let host = "https://webdev-hw-api.vercel.app/api/v1/:gerasimova_anna/comments";
 
+// get
+export const fetchAndRenderComments = () => {
+  let commentsLoading = document.createElement('div');
+commentsLoading.id = 'commentsLoading';
+commentsLoading.innerHTML = '<p>Комментарии загружается...</p>';
+commentsElement.parentNode.replaceChild(commentsLoading, commentsElement);
+ return getCommentsLoading();
+};
 
-   export let comment = [
-        {
-          name: "Глеб Фокин",
-          dates: "12.02.22 12:18",
-          text: "Это будет первый комментарий на этой странице",
-          likeCounter: 3,
-         },
-        {
-          name: "Варвара Н.",
-          dates: "13.02.22 19:22",
-          text: "Мне нравится как оформлена эта страница! ❤",
-         likeCounter: 75,
-        },
-      ];
-      export const fetchAndRenderCommentsTwo = () => {
-        return tttt();
-      }
-      
-      fetchPromise().then((response) => {
-        let loadingComments =document.getElementById('data-loader');
-        loadingComments.style.display='none';
-        const jsonPromise = response.json();
-        jsonPromise.then((responseData) => {
-
-            let appComments = responseData.comments.map((comment) => {
-                return {
-                    name: comment.author.name,
-                    dates: new Date(comment.date).toLocaleString().slice(0, -3),
-                    text: comment.text,
-                    likeCounter: comment.likes,
-                    isLiked: false,
-                };
-            });
-
-            console.log(appComments);
-           
-            renderComments(appComments);
-            likeButton();
-          });
-        });
-        
-          
-
-function AddAComment() {
-
-    let loadingsComments = document.getElementById('data-loader-two');
-    loadingsComments.classList.remove('hidden');
-    let formElement = document.getElementById('form');
-    formElement.classList.add('hidden');
-    buttonElement.disabled = true;
-    console.log(textInputElement, nameInputElement)
-
-    fetchAddComment(textInputElement.value, nameInputElement.value).then((response) => {
-      console.log(response);
-      if (response.status === 500) {
-        throw new Error('Сервер сломался, попробуйте позже');
-      } else if (response.status === 400) {
-        alert ("Имя и комментарий должны быть не короче 3 символов");
-        return;
-      
-      }
-      response.json().then((responseData) => {
-        commentJSON = responseData.result;
-        let loadingsComments = document.getElementById('data-loader-two');
-        loadingsComments.classList.add('hidden');
-        let formElement = document.getElementById('form');
-        formElement.classList.remove('hidden')
-      });
-     
-    })
-    .catch((error)=>{
-      alert('Кажется, у вас сломался интернет, попробуйте позже');
-      buttonElement.disabled = false;
-      buttonElement.textContent = "Добавить";
-      let formElement = document.getElementById('form');
-        formElement.classList.remove('hidden');
-        let loadingsComments = document.getElementById('data-loader-two');
-    loadingsComments.style.display='none';
-      console.warn(error);
-    }
-
-    )
+// второй get
+export const fetchAndRenderCommentsTwo = () => {
+return getComments();
+   }
   
-    .then(()=>{
-      buttonElement.disabled = false;
-      buttonElement.textContent = "Добавить";
-      textInputElement.value = "";
-      nameInputElement.value = "";
-      let formElement = document.getElementById('form');
-        formElement.classList.remove('hidden');
-        
-        let loadingsComments = document.getElementById('data-loader-two');
-        loadingsComments.classList.add('hidden');
-      
-    })
-      
+fetchAndRenderComments();
+fetchAndRenderCommentsTwo(); 
+
+
+export const likeButton = () => {
+const likeElements = document.querySelectorAll('.like-button'); 
+
+for (const likeElement of likeElements) {
+  likeElement.addEventListener('click', (event) => {
+    likeElement.classList.toggle('-active-like');
+    const index = [...document.querySelectorAll('.like-button')].indexOf(likeElement); 
+    const count = document.querySelectorAll('.likes-counter')[index]; 
+    likeElement.classList.contains('-active-like') ? count.innerHTML++ : count.innerHTML--;
+    event.stopPropagation();
+    
+  })
+}
+
+const commentElementsAnswer = document.querySelectorAll('.comment');
+for (const commentAnswer of commentElementsAnswer) {
+  commentAnswer.addEventListener('click', () => {
+    const text = commentAnswer.dataset.text;
+    const nameComment = commentAnswer.dataset.name;
+    commentInputElement.value = text +"\n" + nameComment ;
+    
+  })
+}
+}
+// массив объектов
+window.comments = [];
+  
+  
+// дата
+export function data () {
+  let dateComment = new Date();
+  const months = [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+  ];
+  let fullDate =
+    dateComment.getDate() +
+    "." +
+    months[dateComment.getMonth()] +
+    "." +
+    dateComment.getFullYear() +
+    " " +
+    dateComment.getHours() +
+    ":" +
+    dateComment.getMinutes();
+  return fullDate;
 }
 
 
-export function likeButton() {
-        const likeButtonElements = document.querySelectorAll(".like-button");
-        for (const likeButtonElement of likeButtonElements) {
-          const counterElement =
-            likeButtonElement.parentElement.querySelector(".likes-counter");
-          likeButtonElement.addEventListener("click", (event) => {
-            event.stopPropagation();
-            likeButtonElement.classList.toggle("-active-like");
-            likeButtonElement.classList.contains("-active-like")
-              ? counterElement.innerHTML++
-              : counterElement.innerHTML--;
-          });
-        }
-      }
-     export function time() {
-        let dateComment = new Date();
-        const months = [
-          "01",
-          "02",
-          "03",
-          "04",
-          "05",
-          "06",
-          "07",
-          "08",
-          "09",
-          "10",
-          "11",
-          "12",
-        ];
-        let fullDate =
-          dateComment.getDate() +
-          "." +
-          months[dateComment.getMonth()] +
-          "." +
-          dateComment.getFullYear() +
-          " " +
-          dateComment.getHours() +
-          ":" +
-          dateComment.getMinutes();
-        return fullDate;
-      }
-      buttonElement.addEventListener("click", () => {
-        nameInputElement.classList.remove("erorr");
-        textInputElement.classList.remove("erorr");
-        buttonElement.classList.remove("gray");
+buttonElement.addEventListener("click", () => {
+  
+   
+  nameInputElement.classList.remove('error');
 
-        if (nameInputElement.value === "" || textInputElement.value === "") {
-          nameInputElement.classList.add("erorr");
-          textInputElement.classList.add("erorr");
-          buttonElement.classList.add("gray");
+  if (nameInputElement.value === '' ) {
+    nameInputElement.classList.add('error');
+    return;
+  }
 
-          return;
-        }
+  commentInputElement.classList.remove('error');
 
-        comment.push({
-          name: nameInputElement.value
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll("&", "&amp;")
-            .replaceAll('"', "&quot;"),
-          dates: time(),
-          text: textInputElement.value
-            .replaceAll("BEGIN_QUOTE", "<div class='quote'>")
-            .replaceAll("&", "&amp;")
-            .replaceAll("<", "&lt;")
-            .replaceAll(">", "&gt;")
-            .replaceAll("&", "&amp;")
-            .replaceAll('"', "&quot;"),
-          likeCounter: 0,
-        });
+  if (commentInputElement.value === '' ) {
+    commentInputElement.classList.add('error');
+    return;
+  }
+  
+  comments.push({
+    name: nameInputElement.value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;"),
+    date: data (),
+    text: commentInputElement.value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;"),
+    likesCounter: 0,
+      }); 
+     
+ 
+const postAndRenderComments = () => {
+  let addFormLoading = document.createElement('div');
+  addFormLoading.id = 'addFormLoading';
+  addFormLoading.innerHTML = '<p>Комментарий загружается...</p>';
+  addForm.parentNode.replaceChild(addFormLoading, addForm);
 
-        
-        fetchPromise().then((response) => {
-        let loadingComments =document.getElementById('data-loader');
-        loadingComments.style.display='none';
-        const jsonPromise = response.json();
-        jsonPromise.then((responseData) => {
+return postComments(comments[comments.length - 1].name, comments[comments.length - 1].text)
+.then(() => {
+  return addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
 
-            let appComments = responseData.comments.map((comment) => {
-                return {
-                    name: comment.author.name,
-                    dates: new Date(comment.date).toLocaleString().slice(0, -3),
-                    text: comment.text,
-                    likeCounter: comment.likes,
-                    isLiked: false,
-                };
-            });
+}).then(() => {
+  return fetchAndRenderCommentsTwo();
+ 
+ })
+.catch((error) =>{
+  addFormLoading.parentNode.replaceChild(addForm, addFormLoading);
+alert('Кажется, у вас сломался интернет, попробуйте позже');
+console.warn(error);
 
-            console.log(appComments);
-            AddAComment()
-            renderComments(appComments);
-            likeButton();
-          });
-        });
-        
-      });
+});
+
+ } 
+
+ 
+ postAndRenderComments();
+ 
+ nameInputElement.value = '';
+ commentInputElement.value = '';
+ 
+  renderComments();
+  likeButton();
+  
+});
+
+
+  
+ 
+ 
+  
+ 
+
+ 
+renderComments();
+initEventListeners();
+
+ 

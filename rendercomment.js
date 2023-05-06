@@ -1,15 +1,17 @@
-
 import {likeButton}from "./DOM.js";
 const commentsElement = document.getElementById("comments" );
 
-
 export const renderComments = () =>{
-    const commentsHtml = window.comments.map((comment, index) => {
+
+    const commentsHtml = window.comments.map((comment) => {
+        console.log(comment)
+      const createDate = dateFns.format(new Date(comment.date), 'YYYY-MM-DD hh.mm.ss');
+      console.log(createDate)
     return ` <li class="comment" data-text="${comment.text}" data-name="${comment.name}"
-    data-date= "${comment.date}" data-counter="${comment.likesCounter}">
+    data-date= "${createDate}" data-counter="${comment.likesCounter}">
           <div class="comment-header">
             <div>${comment.name}</div>
-            <div>${comment.date}</div>
+            <div>${createDate}</div>
           </div>
           <div class="comment-body">
             <div  class="comment-text" >
@@ -24,14 +26,13 @@ export const renderComments = () =>{
             </div>
           </div>
         </li>`;
-    }).join(''); 
-    
-          
-    likeButton();
-   
-    commentsElement.innerHTML = commentsHtml;
-    
+    }).join('');
 
-    } 
-    
-    
+
+    likeButton();
+
+    commentsElement.innerHTML = commentsHtml;
+
+
+    }
+

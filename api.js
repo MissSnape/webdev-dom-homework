@@ -18,7 +18,7 @@ export function getCommentsLoading(comments) {
   let appComments = responseData.comments.map((comment) => {
   return {
     name: comment.author.name,
-    date: data (comment.date),
+    date: comment.date,
     text: comment.text,
     likesCounter: 0,
     
@@ -51,7 +51,7 @@ export function getComments(comments) {
    let appComments = responseData.comments.map((comment) => {
    return {
      name: comment.author.name,
-     date: data (comment.date) ,
+     date: comment.date ,
      text: comment.text,
      likesCounter: 0,
      

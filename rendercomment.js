@@ -7,7 +7,7 @@ export const renderComments = () =>{
     const commentsHtml = window.comments.map((comment) => {
         console.log(comment)
        const now = new Date();
-      let createDate = dateFns.format((comment.date), 'YYYY-MM-DD hh.mm.ss');
+      let createDate = dateFns.format(new Date(comment.date), 'YYYY-MM-DD hh.mm.ss');
       console.log(createDate)
     return ` <li class="comment" data-text="${comment.text}" data-name="${comment.name}"
     data-date= "${comment.date}" data-counter="${comment.likesCounter}">
